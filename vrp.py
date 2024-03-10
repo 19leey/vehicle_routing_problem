@@ -1,3 +1,5 @@
+from pathlib import Path
+import argparse
 import math
 
 
@@ -85,14 +87,30 @@ def solve_vrp(loads):
     return schedules
             
 
-loads = [
-    Load(1, Point(-50.1, 80.0), Point(90.1, 12.2)),
-    Load(2, Point(-24.5, -19.2), Point(98.5, 1.8)),
-    Load(3, Point(0.3, 8.9), Point(40.9, 55.0)),
-    Load(4, Point(5.3, -61.1), Point(77.8, -5.4))
-]
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("path_to_problem", help="Path to text file containing VRP problem")
+    args = parser.parse_args()
 
+    # Load problem from text file
+    with open(Path(args.path_to_problem), "r") as f:
+        loads = []
+        for line in f:
+            load_number, pickup, dropoff = line.split(" ")
 
-solution = solve_vrp(loads)
-for schdule in solution:
-    print(schdule)
+            # Skip the header row
+            if load_number == "loadNumber":
+                continue
+            
+            # Load coordinates as tuples
+            # Assumption is correctly defined coordinates - 'eval()' is generally not recommended
+            pickup = eval(pickup)
+            dropoff = eval(dropoff)
+
+            loads.append(Load(int(load_number), Point(*pickup), Point(*dropoff)))
+
+    solution = solve_vrp(loads)
+    for schedule in solution:
+        print(schedule)
+
+    
