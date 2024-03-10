@@ -27,6 +27,12 @@ To run:
 > python3 vrp.py [path_to_problem]
 ```
 
+To evaluate:
+
+``` shell
+> python3 evaluate.py --cmd 'python3 vrp.py' --problemDir 'problems/'
+```
+
 ### Approach
 
 The VRP problem can be generalized into the traveling salesman problem - find the
